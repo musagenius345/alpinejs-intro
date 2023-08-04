@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="src/css/style.css">
+  <title></title>
+</head>
+<body>
+  <main id="container center">
+    <form class="container">
+      <input type="search" name="search" id="search" placeholder="Search...">
+      <select>
+        <option value="" selected>Filter by Region</option>
+        <option value="Africa">Africa</option>
+        <option value="Europe">Europe</option>
+        <option value="Asia">Asia</option>
+        <option value="America">Americas</option>
+        <option value="Oceania">Oceania</option>
+      </select>
+    </form>
+    <div class="flex center">
+      <article class="card flex-card">
+        <div class="img">
+          <img src="musa.jpg" alt="/musa.jpg" width="750" height="750">
+        </div>
+        <div class="info">
+          <h3 class="country" data-country-name="Germany">Germany</h3>
+          <p class="info__detail">Population: <span class="population" data-population="0"></span> </p>
+          <p class="info__detail">Region: <span class="region" data-region="region"></span></p>
+          <p class="info__detail">Capital: <span class="capital" data-capital=""></span></p>
+        </div>
+      </article>
+    </div>
+  </main>
+  <script src="htmx.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,69 @@
+@import url('./pico.min.css');
+
+:root {
+  --bdr: 0.625rem;
+}
+
+body {
+  max-width: 100%;
+}
+
+select:active>[value=""] {
+  display: none;
+}
+
+/* 
+select option{
+  font: inherit;
+} */
+
+div.img {
+  max-width: 100%;
+}
+
+article {
+  max-width: 100%;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+  object-fit: cover;
+  border-top-left-radius: var(--bdr);
+  border-top-right-radius: var(--bdr);
+}
+
+.card {
+  padding: 0;
+  border-radius: var(--bdr);
+  width: clamp(28rem, 35rem, 55rem);
+
+}
+
+.info {
+  margin-inline: 2rem;
+  margin-block: 1.6rem;
+}
+
+.info h3 {
+  margin-block: .286rem;
+}
+
+.info__detail {
+  margin-block: 0;
+}
+
+.info__detail+.info__detail {
+  margin-block-start: 0.52rem;
+}
+
+
+.center {
+  display: grid;
+  place-items: center;
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
+}
