@@ -5,13 +5,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="src/css/style.css">
-  <title></title>
+  <script defer src="static/js/alpine.js"></script>
+  <title>Countries</title>
 </head>
+
 <body>
-  <main id="container center">
+  <main id="container" class="center" x-data="{ countries: loadCountries() }" x-init="loadCountries()" x-effect="console.log(countries)" >
     <form class="container">
-      <input type="search" name="search" id="search" placeholder="Search...">
-      <select>
+      <input type="search" name="search" id="search" hx-get="data.json" hx-trigger="input" hx-target="#results" hx-swap="never" placeholder="Search...">
+      <select hx-get="data.json" hx-trigger="change" hx-swap="never" hx-target="#results">
         <option value="" selected>Filter by Region</option>
         <option value="Africa">Africa</option>
         <option value="Europe">Europe</option>
@@ -20,21 +22,42 @@
         <option value="Oceania">Oceania</option>
       </select>
     </form>
-    <div class="flex center">
+    <template class="flex center" x-for="country in countries" :key="country.alpha3Code">
       <article class="card flex-card">
         <div class="img">
-          <img src="musa.jpg" alt="/musa.jpg" width="750" height="750">
+          <img :src="country.flags.svg" :alt="country.name" width="750" height="750">
         </div>
         <div class="info">
-          <h3 class="country" data-country-name="Germany">Germany</h3>
-          <p class="info__detail">Population: <span class="population" data-population="0"></span> </p>
-          <p class="info__detail">Region: <span class="region" data-region="region"></span></p>
-          <p class="info__detail">Capital: <span class="capital" data-capital=""></span></p>
+          <h3 class="country" :data-country-name="country.name" x-text="country.name"></h3>
+          <p class="info__detail">Population: <span class="population" :data-population="country.population" x-text="country.population"></span> </p>
+          <p class="info__detail">Region: <span class="region" :data-region="country.region" x-text="country.region"></span></p>
+          <p class="info__detail">Capital: <span class="capital" :data-capital="country.capital" x-text="country.capital"></span></p>
         </div>
       </article>
-    </div>
+    </template>
+    <div class="countries"></div>
   </main>
-  <script src="htmx.min.js"></script>
+  <script src="static/js/htmx.min.js"></script>
+  <!-- <script src="src/js/main.js"></script> -->
+  <script>
+    async function loadCountries() {
+      try {
+        const response = await fetch('data.json');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json()
+        return data
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        return [];
+      }
+    }
+
+
+  
+  </script>
+
 </body>
 
 </html>

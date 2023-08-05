@@ -1,4 +1,103 @@
+<html>
 
-<div class="flex center">
-  <h1>404 Error</h1>
-</div>
+<head>
+  <script defer src="../../static/js/alpine.js"></script>
+  <link rel="stylesheet" href="../css/pico.min.css#">
+  <style>
+    [x-cloak] {
+      display: none;
+    }
+
+    button {
+      color: white;
+      border: 1px solid black;
+      border-radius: 8px;
+      padding: 3px 8px;
+    }
+
+    .blue {
+      background-color: blue;
+    }
+
+    .steelblue {
+      background-color: steelblue;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <div x-data="{ 
+      open: false, 
+      name: 'Brad', 
+      search: '',
+      posts: [
+      {title: 'Post One'},
+      {title: 'Post Two'},
+      {title: 'Post Three'},
+      {title: 'Post Four'}
+      ]
+      }">
+      <!-- x-on & x-bind -->
+      <button x-on:click="open = !open" :class="open ? 'steelblue' : 'blue' ">
+        Toggle
+      </button>
+
+      <!-- x-show & x-transition -->
+      <div x-show="open" x-transition x-cloak>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem
+          numquam natus eligendi mollitia porro, itaque ad asperiores
+          quisquam, voluptatibus culpa veritatis deserunt optio quasi sapiente
+          dicta? Praesentium facere quisquam cumque suscipit quidem voluptates
+          eius ex recusandae ut similique alias, soluta omnis facilis quasi,
+          explicabo fugiat, rem, rerum nostrum. Deserunt nihil sed nisi
+          aperiam laborum ratione veritatis expedita eaque in, atque facere,
+          voluptas, dolore. Nulla aperiam corrupti iure debitis tenetur,
+          laboriosam quibusdam possimus animi erunt eveniet error suscipit
+          recusandae, officia magni assumenda.
+        </p>
+      </div>
+      <!-- x-text -->
+      <div class="text">The value of name is <span x-text="name"></span></div>
+
+      <!-- x-effect -->
+      <div x-effect="console.log(search)"></div>
+
+      <!-- x-model -->
+      <input x-model="search" type="search" name="search" id="search" palceholder="Seach...">
+      <p>Searching for: <span x-text="search"></span></p>
+
+      <!-- x-if -->
+      <template x-if="open">
+        <div>
+          Template based on a condition
+        </div>
+      </template>
+
+      <!-- x-for -->
+      <h3>Posts</h3>
+      <template x-for="post in posts">
+        <li x-text="post.title"></li>
+      </template>
+      <button @click="posts.push({title: 'New Post'})">Add post</button>
+
+      <!-- x-ref -->
+      <div>
+        <div x-ref="text"></div>
+        <button class="" style="background-color: orangered" @click="$refs.text.innerText= 'Hello' ">Click</button>
+      </div>
+
+      <!-- x-html -->
+      <div class="" x-html="(await fetch('partial.html'))"></div>
+    </div>
+  </main>
+</body>
+<script>
+  async function fetchData() { 
+    const response = await fetch('./partial.html')
+    console.log(response)
+  }
+</script>
+
+</html>
