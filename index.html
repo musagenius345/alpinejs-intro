@@ -10,22 +10,23 @@
 </head>
 
 <body>
-  <main id="container" class="center" x-data="{ countries: loadCountries() }" x-init="loadCountries()" x-effect="console.log(countries)" >
+  <main id="container" class="center" x-data="{ countries: loadCountries(), selectedRegion: ''}" x-init="loadCountries()">
     <form class="container">
-      <input type="search" name="search" id="search" hx-get="data.json" hx-trigger="input" hx-target="#results" hx-swap="never" placeholder="Search...">
-      <select hx-get="data.json" hx-trigger="change" hx-swap="never" hx-target="#results">
+      <input type="search" name="search" id="search" placeholder="Search...">
+      <select x-model="selectedRegion" x-data="{regions: filterByRegion()}">
         <option value="" selected>Filter by Region</option>
-        <option value="Africa">Africa</option>
-        <option value="Europe">Europe</option>
-        <option value="Asia">Asia</option>
-        <option value="America">Americas</option>
-        <option value="Oceania">Oceania</option>
+        <template x-for="region in regions" :key="region">
+          <option value="region" x-transition x-text="region" x-effect="console.log(region)"></option>
+        </template>
       </select>
     </form>
-    <template class="flex center" x-for="country in countries" :key="country.alpha3Code">
-      <article class="card flex-card">
+
+
+    <template id="content" class="flex center" x-for="country in countries" :key="country.alpha3Code">
+      
+      <article class="card flex-card" x-show="true">
         <div class="img">
-          <img :src="country.flags.svg" :alt="country.name" width="750" height="750">
+          <img loading="lazy" :src="country.flags.svg" :alt="country.name" width="750" height="750">
         </div>
         <div class="info">
           <h3 class="country" :data-country-name="country.name" x-text="country.name"></h3>
@@ -37,7 +38,7 @@
     </template>
     <div class="countries"></div>
   </main>
-  <script src="static/js/htmx.min.js"></script>
+  <!--<script src="static/js/htmx.min.js"></script> -->
   <!-- <script src="src/js/main.js"></script> -->
   <script>
     async function loadCountries() {
@@ -53,9 +54,24 @@
         return [];
       }
     }
-
-
   
+
+    async function filterByRegion() {
+      const countries = await loadCountries()
+      let countryRegions = new Set()
+      for (let i = 0; i < countries.length; i++) {
+        countryRegions.add(countries[i].region)
+      }
+      countryRegions = [...countryRegions]
+      return countryRegions
+
+    }
+    
+    
+    
+    
+
+    
   </script>
 
 </body>

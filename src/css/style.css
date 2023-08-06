@@ -67,3 +67,10 @@ img {
   display: flex;
   flex-direction: column;
 }
+/* @media(min-width: 30rem){
+  .flex {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+} */
