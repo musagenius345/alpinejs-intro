@@ -10,20 +10,28 @@
 </head>
 
 <body>
-  <main id="container" class="center" x-data="{ countries: loadCountries(), selectedRegion: ''}" x-init="loadCountries()">
+  <!-- x-init="loadCountries()" -->
+  <main id="container" class="center" x-data="{ 
+      regions: ['Africa', 'Americas', 'Antarctic', 'Antarctic Ocean', 'Asia', 'Europe', 'Oceania', 'Polar'],
+      searchQuery: '',
+      countries: loadCountries()
+      }">
+
+    <!-- form input and search -->
     <form class="container">
-      <input type="search" name="search" id="search" placeholder="Search...">
-      <select x-model="selectedRegion" x-data="{regions: filterByRegion()}">
+      <!-- @input.camel="searchInput" -->
+      <input type="search" x-model="searchQuery" name="search" id="search" placeholder="Search...">
+      <select>
         <option value="" selected>Filter by Region</option>
-        <template x-for="region in regions" :key="region">
-          <option value="region" x-transition x-text="region" x-effect="console.log(region)"></option>
+        <template x-for="selectedRegion in regions" :key="crypto.randomUUID()">
+          <option x-text="selectedRegion" value="selectedRegion"></option>
         </template>
       </select>
     </form>
 
-
+    <!-- cards -->
     <template id="content" class="flex center" x-for="country in countries" :key="country.alpha3Code">
-      
+
       <article class="card flex-card" x-show="true">
         <div class="img">
           <img loading="lazy" :src="country.flags.svg" :alt="country.name" width="750" height="750">
@@ -43,7 +51,7 @@
   <script>
     async function loadCountries() {
       try {
-        const response = await fetch('data.json');
+        const response = await fetch('data.min.json');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -54,24 +62,26 @@
         return [];
       }
     }
-  
 
-    async function filterByRegion() {
-      const countries = await loadCountries()
-      let countryRegions = new Set()
-      for (let i = 0; i < countries.length; i++) {
-        countryRegions.add(countries[i].region)
+    // function searchInput(e) {
+    //   // let searchQuery = ''
+    //   searchQuery += e.target.value
+    //   console.log(searchQuery)
+    // }
+
+
+    function handleData(regions, searchCountry) {
+      const data = loadCountries()
+      for (let i = 0; i < data.length; i++) {
+        if (regions != '') {
+          return data.filter(data[i] == selectedRegion)
+        }
+        if (searchQuery != '') {
+          return data.filter(data.name == 'searchQuery')
+
+        }
       }
-      countryRegions = [...countryRegions]
-      return countryRegions
-
     }
-    
-    
-    
-    
-
-    
   </script>
 
 </body>
