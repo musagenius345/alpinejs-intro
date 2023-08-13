@@ -1,0 +1,11 @@
+
+<article class="card flex-card" x-show="shouldShowCountry(country)">
+  <div class="img">
+    <img loading="lazy" :src="country.flags.svg" :alt="country.name" width="750" height="750">
+  </div>
+  <div class="info">
+    <h3 class="country" :data-country-name="country.name" x-text="country.name"></h3>
+    <p class="info__detail">Population: <span class="population" :data-population="country.population" x-text="country.population"></span> </p>
+    <p class="info__detail">Region: <span class="region" :data-region="country.region" x-text="country.region"></span></p>
+    <p class="info__detail">Capital: <span class="capital" :data-capital="country.capital" x-text="country.capital"></span></p>
+  </div>

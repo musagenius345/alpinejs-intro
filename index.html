@@ -9,81 +9,78 @@
   <title>Countries</title>
 </head>
 
-<body>
-  <!-- x-init="loadCountries()" -->
-  <main id="container" class="center" x-data="{ 
-      regions: ['Africa', 'Americas', 'Antarctic', 'Antarctic Ocean', 'Asia', 'Europe', 'Oceania', 'Polar'],
-      searchQuery: '',
-      countries: loadCountries()
-      }">
+<body x-data="app()">
+  <main id="container" class="center" x-init="initialize">
 
-    <!-- form input and search -->
+    <!-- Form input and search -->
     <form class="container">
-      <!-- @input.camel="searchInput" -->
       <input type="search" x-model="searchQuery" name="search" id="search" placeholder="Search...">
-      <select>
+      <select x-model="selectedRegion">
         <option value="" selected>Filter by Region</option>
-        <template x-for="selectedRegion in regions" :key="crypto.randomUUID()">
-          <option x-text="selectedRegion" value="selectedRegion"></option>
+        <template x-for="region in regions" :key="region">
+          <option x-text="region" :value="region"></option>
         </template>
       </select>
     </form>
 
-    <!-- cards -->
-    <template id="content" class="flex center" x-for="country in countries" :key="country.alpha3Code">
-
-      <article class="card flex-card" x-show="true">
+    <!-- Cards -->
+    <template id="content" class="flex center" x-for="country in filteredCountries" :key="country.alpha3Code">
+      <article class="card flex-card" x-show="shouldShowCountry(country)">
         <div class="img">
           <img loading="lazy" :src="country.flags.svg" :alt="country.name" width="750" height="750">
         </div>
         <div class="info">
           <h3 class="country" :data-country-name="country.name" x-text="country.name"></h3>
-          <p class="info__detail">Population: <span class="population" :data-population="country.population" x-text="country.population"></span> </p>
+          <p class="info__detail">Population: <span class="population" :data-population="country.population" x-text="country.population"></span></p>
           <p class="info__detail">Region: <span class="region" :data-region="country.region" x-text="country.region"></span></p>
           <p class="info__detail">Capital: <span class="capital" :data-capital="country.capital" x-text="country.capital"></span></p>
         </div>
       </article>
     </template>
-    <div class="countries"></div>
+
   </main>
-  <!--<script src="static/js/htmx.min.js"></script> -->
-  <!-- <script src="src/js/main.js"></script> -->
   <script>
-    async function loadCountries() {
-      try {
-        const response = await fetch('data.min.json');
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+    function app() {
+      return {
+        regions: ['Africa', 'Americas', 'Antarctic', 'Antarctic Ocean', 'Asia', 'Europe', 'Oceania', 'Polar'],
+        searchQuery: '',
+        selectedRegion: '',
+        countries: [],
+        initialize() {
+          this.loadCountries();
+        },
+        async loadCountries() {
+          try {
+            const response = await fetch('data.min.json');
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            this.countries = await response.json();
+          } catch (error) {
+            console.error('Error fetching data:', error);
+            this.countries = [];
+          }
+        },
+        shouldShowCountry(country) {
+          return this.selectedRegion === '' || country.region === this.selectedRegion;
+        },
+        get filteredCountries() {
+          return this.countries.filter(country => {
+            const includesSearchQuery = country.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+            return includesSearchQuery || country.name.toLowerCase().match(this.searchQuery.toLowerCase());
+          }).sort((a, b) => {
+            const indexA = a.name.toLowerCase().indexOf(this.searchQuery.toLowerCase());
+            const indexB = b.name.toLowerCase().indexOf(this.searchQuery.toLowerCase());
+            if (indexA !== indexB) {
+              return indexA - indexB;
+            } else {
+              return a.name.localeCompare(b.name);
+            }
+          });
         }
-        const data = await response.json()
-        return data
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        return [];
-      }
-    }
-
-    // function searchInput(e) {
-    //   // let searchQuery = ''
-    //   searchQuery += e.target.value
-    //   console.log(searchQuery)
-    // }
-
-
-    function handleData(regions, searchCountry) {
-      const data = loadCountries()
-      for (let i = 0; i < data.length; i++) {
-        if (regions != '') {
-          return data.filter(data[i] == selectedRegion)
-        }
-        if (searchQuery != '') {
-          return data.filter(data.name == 'searchQuery')
-
-        }
-      }
+      };
     }
   </script>
-
 </body>
 
 </html>
