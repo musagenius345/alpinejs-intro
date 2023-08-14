@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html data-theme="dark">
 
 <head>
   <meta charset="UTF-8">
@@ -9,7 +9,7 @@
   <title>Countries</title>
 </head>
 
-<body x-data="app()">
+<body x-data="app()" >
   <main id="container" class="center" x-init="initialize">
 
     <!-- Form input and search -->
@@ -31,7 +31,7 @@
         </div>
         <div class="info">
           <h3 class="country" :data-country-name="country.name" x-text="country.name"></h3>
-          <p class="info__detail">Population: <span class="population" :data-population="country.population" x-text="country.population"></span></p>
+          <p class="info__detail">Population: <span class="population" :data-population="country.population" x-text="country.population.toLocaleString()"></span></p>
           <p class="info__detail">Region: <span class="region" :data-region="country.region" x-text="country.region"></span></p>
           <p class="info__detail">Capital: <span class="capital" :data-capital="country.capital" x-text="country.capital"></span></p>
         </div>
@@ -44,6 +44,7 @@
       return {
         regions: ['Africa', 'Americas', 'Antarctic', 'Antarctic Ocean', 'Asia', 'Europe', 'Oceania', 'Polar'],
         searchQuery: '',
+        selectedCountry: null,
         selectedRegion: '',
         countries: [],
         initialize() {
